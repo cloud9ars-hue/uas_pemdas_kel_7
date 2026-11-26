@@ -18,8 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt = mysqli_prepare($conn, "SELECT id, nama_lengkap, password FROM users WHERE username = ?");
         mysqli_stmt_bind_param($stmt, "s", $username);
         mysqli_stmt_execute($stmt);
-        $result = mysqli_stmt_get_result($stmt);
-        $user = mysqli_fetch_assoc($result);
+        $user = mysqli_fetch_assoc(mysqli_stmt_get_result($stmt));
 
         if ($user && password_verify($password, $user['password'])) {
             $_SESSION['user_id'] = $user['id'];
@@ -37,14 +36,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Warung Ibu Nur</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Login - SiFlow</title>
+    <link rel="stylesheet" href="style.css?v=2">
 </head>
 <body>
 <div class="auth-wrapper">
     <div class="auth-card">
-        <h1>Login Kasir</h1>
-        <p class="subtitle">Warung Terang Bulan & Martabak Mini Ibu Nur</p>
+        <div class="auth-brand">SiFlow</div>
+        <h1>Masuk ke Aplikasi</h1>
+        <p class="subtitle">Terang Bulan & Martabak Mini Ibu Nur</p>
 
         <?php if ($pesanError): ?>
             <div class="alert alert-error"><?= htmlspecialchars($pesanError) ?></div>
@@ -59,11 +59,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <label>Password</label>
                 <input type="password" name="password" placeholder="Masukkan password" required>
             </div>
-            <button type="submit" class="btn" style="width: 100%;">Masuk</button>
+            <button type="submit" class="btn btn-navy" style="width: 100%;">Login</button>
         </form>
 
         <div class="auth-footer">
-            Belum punya akun? <a href="register.php">Daftar di sini</a>
+            Belum punya akun? <a href="register.php">Register di sini</a>
         </div>
     </div>
 </div>

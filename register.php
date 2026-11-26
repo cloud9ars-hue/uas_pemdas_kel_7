@@ -26,16 +26,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         mysqli_stmt_store_result($stmtCek);
 
         if (mysqli_stmt_num_rows($stmtCek) > 0) {
-            $pesanError = "Username sudah terdaftar, gunakan username lain.";
+            $pesanError = "Username sudah terdaftar.";
         } else {
             $hash = password_hash($password, PASSWORD_DEFAULT);
             $stmtInsert = mysqli_prepare($conn, "INSERT INTO users (nama_lengkap, username, password) VALUES (?, ?, ?)");
             mysqli_stmt_bind_param($stmtInsert, "sss", $nama, $username, $hash);
 
             if (mysqli_stmt_execute($stmtInsert)) {
-                $pesanSukses = "Registrasi berhasil! Silakan login.";
+                $pesanSukses = "Registrasi berhasil! Silakan login ke SiFlow.";
             } else {
-                $pesanError = "Terjadi kesalahan saat menyimpan akun.";
+                $pesanError = "Gagal menyimpan akun.";
             }
         }
     }
@@ -46,14 +46,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register - Warung Ibu Nur</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Register - SiFlow</title>
+    <link rel="stylesheet" href="style.css?v=2">
 </head>
 <body>
 <div class="auth-wrapper">
     <div class="auth-card">
-        <h1>Daftar Akun</h1>
-        <p class="subtitle">Sistem Pencatatan Terang Bulan Mini Ibu Nur</p>
+        <div class="auth-brand">SiFlow</div>
+        <h1>Buat Akun Baru</h1>
+        <p class="subtitle">Terang Bulan & Martabak Mini Ibu Nur</p>
 
         <?php if ($pesanError): ?>
             <div class="alert alert-error"><?= htmlspecialchars($pesanError) ?></div>
@@ -66,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <form method="POST">
             <div class="form-group">
                 <label>Nama Lengkap</label>
-                <input type="text" name="nama_lengkap" placeholder="Contoh: Ibu Nur / Kasir" required>
+                <input type="text" name="nama_lengkap" placeholder="Contoh: Ibu Nur" required>
             </div>
             <div class="form-group">
                 <label>Username</label>
@@ -80,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <label>Konfirmasi Password</label>
                 <input type="password" name="konfirmasi_password" placeholder="Ulangi password" required>
             </div>
-            <button type="submit" class="btn" style="width: 100%;">Daftar Sekarang</button>
+            <button type="submit" class="btn btn-navy" style="width: 100%;">Daftar</button>
         </form>
 
         <div class="auth-footer">

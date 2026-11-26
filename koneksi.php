@@ -14,12 +14,12 @@ if (!$conn) {
     die("Koneksi database gagal: " . mysqli_connect_error());
 }
 
-// Konstanta acuan sesuai data mitra Ibu Nur
 define('HARGA_SATUAN_DEFAULT', 5000);
 define('MODAL_HARIAN_DEFAULT', 200000);
+define('DAFTAR_TOPPING', ['Keju', 'Cokelat', 'Kacang', 'Matcha', 'Tiramisu']);
 
 function formatRupiah($angka) {
-    return "Rp" . number_format($angka, 0, ',', '.');
+    return "Rp" . number_format((float)$angka, 0, ',', '.');
 }
 
 function cekLogin() {
@@ -27,5 +27,23 @@ function cekLogin() {
         header("Location: login.php");
         exit;
     }
+}
+
+// Mendeteksi otomatis jumlah hari dalam bulan dari tanggal (format YYYY-MM-DD)
+function jumlahHariDalamBulan($tanggal) {
+    $ts = strtotime($tanggal);
+    if ($ts === false) {
+        $ts = time();
+    }
+    return (int)date('t', $ts);
+}
+
+// Menghitung porsi harian dari nominal modal bulanan berdasarkan jumlah hari di bulan tsb
+function hitungPorsiHarianBulanan($nominalBulanan, $tanggal) {
+    $hari = jumlahHariDalamBulan($tanggal);
+    if ($hari <= 0) {
+        return 0;
+    }
+    return (int)round($nominalBulanan / $hari);
 }
 ?>
